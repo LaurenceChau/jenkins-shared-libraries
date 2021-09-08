@@ -1,6 +1,6 @@
 def call(){
 
-    node {
+    stage("input") {
         input {
             message "Should we continue?"
             ok "Yes, we should."
@@ -9,6 +9,9 @@ def call(){
             }
         }
         echo "Hello, ${PERSON}"
+    }
+    stage("deploy") {
+        echo "deploy"
     }
 
     
