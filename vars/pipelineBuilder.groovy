@@ -13,7 +13,7 @@ def call(body) {
                 steps {
                     script {
                         if ( pipeline_name == "p1") parallel stage_deploy()
-                        else if ( pipeline_name == "p2" ) 
+                        else if ( pipeline_name == "p2" ) stage_p2()
                     }
                     
                 }
