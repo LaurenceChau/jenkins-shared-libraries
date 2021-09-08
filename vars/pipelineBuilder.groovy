@@ -10,7 +10,6 @@ def call(body) {
         options {buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '1'))}
         stages {
             stage('Create List') {
-                agent {node 'nodename'}
                 steps {
                     script {
                         // you may create your list here, lets say reading from a file after checkout
