@@ -4,6 +4,7 @@ def call(body) {
     body.delegate = config
     body()
     
+    files = ["file-1", "file-2", "file-3"]
     pipeline {
         agent any
         stages {
@@ -11,12 +12,11 @@ def call(body) {
                 steps {
                     script {
                         def tests = [:]
-                        for (f in findFiles(glob: '**/html/*.html')) {
+                        for (f in files) {
                             tests["${f}"] = {
-                                node {
-                                    stage("${f}") {
-                                        echo '${f}'
-                                    }
+
+                                stage("${f}") {
+                                    echo '${f}'
                                 }
                             }
                         }
