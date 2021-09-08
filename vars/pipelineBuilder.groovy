@@ -12,6 +12,11 @@ def call(body) {
             stage('1') {
                 steps {
                     script {
+                        echo "step 1"
+                    }
+                }
+                steps {
+                    script {
                         if ( pipeline_name == "p1") parallel stage_deploy()
                         else if ( pipeline_name == "p2" ) stage_p2()
                     }
