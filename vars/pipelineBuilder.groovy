@@ -4,109 +4,43 @@ def call(body) {
     body.delegate = config
     body()
     
+    def list
     pipeline {
-        agent {
-            kubernetes {
-                inheritFrom 'build-tools'
-                defaultContainer 'maven'
-            }
-        }
+        agent none
+        options {buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '1'))}
         stages {
-            stage('PreCheck') {
+            stage('Create List') {
+                agent {node 'nodename'}
                 steps {
-                    echo 'PreCheck...'
+                    script {
+                        // you may create your list here, lets say reading from a file after checkout
+                        list = ["Test-1", "Test-2", "Test-3", "Test-4", "Test-5"]
+                    }
+                }
+                post {
+                    cleanup {
+                        cleanWs()
+                    }
                 }
             }
-            stage('Scan Code') {
-                when {
-                    branch 'main'
-                }
-                failFast true 
-                parallel {
-                    stage('SonarIQ Scan') {
-                        steps {
-                            echo 'SonarIQ Scan...'
-                        }
-                    }
-                    stage('Checkmarx Scan') {
-                        steps {
-                            echo 'Checkmarx Scan'
-                        }
-                    }
-                    stage('SonarQube Scan') {
-                        steps {
-                            echo 'SonarQube Scan'
-                        }
-                    }
-                    stage('Branch C') {
-                        stages {
-                            stage('Nested 1') {
-                                steps {
-                                    echo "In stage Nested 1 within Branch C"
-                                }
-                            }
-                            stage('Nested 2') {
-                                steps {
-                                    echo "In stage Nested 2 within Branch C"
-                                }
+            stage('Dynamic Stages') {
+                agent {node 'nodename'}
+                steps {
+                    script {
+                        for(int i=0; i < list.size(); i++) {
+                            stage(list[i]){
+                                echo "Element: $i"
                             }
                         }
                     }
                 }
-            }
-            stage('Check Scan Result') {
-                steps {
-                    echo 'Check Scan Result..'
-                }
-            }
-            stage('Build') {
-                steps {
-                    echo 'Building..'
-                }
-            }
-            stage('Unit Test') {
-                steps {
-                    echo 'Testing..'
-                    sh 'echo hello world'
-                }
-            }
-            stage('Deploy Input') {
-                input {
-                    message "Deploy To DIT?"
-                    ok "Yes, Let's go"
-                    submitter "admin"
-                    parameters {
-                        string(name: 'GCP Site\'s IP', defaultValue: '10.91.40.76', description: 'GCP Site\'s IP')
+                post {
+                    cleanup {
+                        cleanWs()
                     }
-                }
-                stages {
-                    stage('Deploy') {
-                        failFast true
-                        parallel {
-                            stage('Deploy Config') {
-                                steps {
-                                    echo 'Deploy Config..'
-                                }
-                            }
-                            stage('Deploy IHS') {
-                                steps {
-                                    echo 'Deploy IHS..'
-                                }
-                            }
-                            stage('Deploy CXP') {
-                                steps {
-                                    echo 'Deploy CXP..'
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            stage('Integration Test') {
-                steps {
-                    echo 'Integration Test..'
                 }
             }
         }
     }
+
 }
