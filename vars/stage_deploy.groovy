@@ -2,7 +2,7 @@ def call(){
 
 
     def files = ["file-1", "file-2", "file-3"]
-    def tests
+    def tests = [:]
     for (f in files) {
         tests["${f}"] = {
 
