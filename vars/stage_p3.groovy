@@ -1,13 +1,13 @@
 def call(){
 
     stage("input") {
-        input {
-            message "Should we continue?"
-            ok "Yes, we should."
-            parameters {
-                string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-            }
-        }
+
+        input(
+            id: 'coreImageTags', message: 'Enter a comma separated list of additional tags for the image (0.0.1,some-tagname,etc):?', 
+            parameters: [
+                [$class: 'StringParameterDefinition', defaultValue: 'None', description: 'List of tags', name: 'coreImageTagsList'],
+            ]
+        )
         echo "Hello, ${PERSON}"
     }
     stage("deploy") {
