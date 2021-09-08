@@ -6,7 +6,7 @@ def call(body) {
     
     def list
     pipeline {
-        agent none
+        agent any
         options {buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '1'))}
         stages {
             stage('Create List') {
