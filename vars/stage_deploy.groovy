@@ -1,11 +1,16 @@
 def call(){
+
     script {
-        stage("stage-1") {
-            echo 'stage-1'
+        def tests = ["file-1", "file-2", "file-3"]
+        for (f in files) {
+            tests["${f}"] = {
+
+                stage("${f}") {
+                    echo '${f}'
+                }
+            }
         }
-        stage ("stage-2") {
-            echo "stage-2"
-        }
+        parallel tests
     }
     
 }
