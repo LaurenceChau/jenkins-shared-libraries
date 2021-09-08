@@ -18,7 +18,6 @@ def call(body) {
                 }
             }
             stage('Dynamic Stages') {
-                agent {node 'nodename'}
                 steps {
                     script {
                         for(int i=0; i < list.size(); i++) {
@@ -26,11 +25,6 @@ def call(body) {
                                 echo "Element: $i"
                             }
                         }
-                    }
-                }
-                post {
-                    cleanup {
-                        cleanWs()
                     }
                 }
             }
