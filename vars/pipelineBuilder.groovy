@@ -11,16 +11,13 @@ def call(body) {
             stage('1') {
                 steps {
                     script {
-                        def tests = [:]
-                        for (f in files) {
-                            tests["${f}"] = {
-
-                                stage("${f}") {
-                                    echo '${f}'
-                                }
+                            stage("stage-1") {
+                                echo 'stage-1'
+                            }
+                            stage ("stage-2") {
+                                echo "stage-2"
                             }
                         }
-                        parallel tests
                     }
                 }
             }       
