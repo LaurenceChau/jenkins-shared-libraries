@@ -5,7 +5,7 @@ def call(body) {
     body()
     
     def files = ["file-1", "file-2", "file-3"]
-    def pipeline_name = "p2"
+    def pipeline_name = "p3"
     pipeline {
         agent any
         stages {
@@ -19,6 +19,7 @@ def call(body) {
                     script {
                         if ( pipeline_name == "p1") parallel stage_deploy()
                         else if ( pipeline_name == "p2" ) stage_p2()
+                        else stage_p3()
                     }
                     
                 }
