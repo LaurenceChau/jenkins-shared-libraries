@@ -10,7 +10,8 @@ def call(body) {
         stages {
             stage('1') {
                 steps {
-                    stage_deploy()
+                    
+                    parallel stage_deploy()
                 }
             }       
         }
