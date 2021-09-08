@@ -4,30 +4,26 @@ def call(body) {
     body.delegate = config
     body()
     
-    def list
     pipeline {
         agent any
-        options {buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '1'))}
         stages {
-            stage('Create List') {
+            stage('1') {
                 steps {
                     script {
-                        // you may create your list here, lets say reading from a file after checkout
-                        list = ["Test-1", "Test-2", "Test-3", "Test-4", "Test-5"]
-                    }
-                }
-            }
-            stage('Dynamic Stages') {
-                steps {
-                    script {
-                        for(int i=0; i < list.size(); i++) {
-                            stage(list[i]){
-                                echo "Element: $i"
+                        def tests = [:]
+                        for (f in findFiles(glob: '**/html/*.html')) {
+                            tests["${f}"] = {
+                                node {
+                                    stage("${f}") {
+                                        echo '${f}'
+                                    }
+                                }
                             }
                         }
+                        parallel tests
                     }
                 }
-            }
+            }       
         }
     }
 
