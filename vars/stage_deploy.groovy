@@ -12,5 +12,4 @@ def call(){
         }
     }
     
-    tests
 }
