@@ -10,15 +10,7 @@ def call(body) {
         stages {
             stage('1') {
                 steps {
-                    script {
-                        stage("stage-1") {
-                            echo 'stage-1'
-                        }
-                        stage ("stage-2") {
-                            echo "stage-2"
-                        }
-                        
-                    }
+                    stage_deploy
                 }
             }       
         }
